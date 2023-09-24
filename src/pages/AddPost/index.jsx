@@ -16,7 +16,6 @@ export const AddPost = () => {
   const navigate = useNavigate();
 
   const isAuth = useSelector(selectIsAuth);
-  const [isLoading, setLoading] = React.useState(false);
   const [imageUrl, setImageUrl] = React.useState("");
   const [text, setText] = React.useState("");
   const [title, setTitle] = React.useState("");
@@ -48,7 +47,6 @@ export const AddPost = () => {
 
   const onSubmit = async () => {
     try {
-      setLoading(true);
       const fields = {
         title,
         imageUrl,

@@ -1,49 +1,30 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
+import { useParams } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 
-import { Post } from "../components/Post";
-import { TagsBlock } from "../components/TagsBlock";
-import { CommentsBlock } from "../components/CommentsBlock";
-import {
-  fetchPosts,
-  fetchTags,
-  fetchPostsPopularity,
-  fetchPostsTag,
-} from "../redux/slices/posts";
+import styles from "./TagPage.module.scss";
+import { Post } from "../../components/Post";
+import { TagsBlock } from "../../components/TagsBlock";
+import { CommentsBlock } from "../../components/CommentsBlock";
+import { fetchPostsTag } from "../../redux/slices/posts";
 
-export const Home = () => {
+export const TagPage = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.auth.data);
   const { posts, tags } = useSelector((state) => state.posts);
-  const [value, setValue] = React.useState(0);
+  const { id } = useParams();
 
   const isPostsLoading = posts.status === "loading";
   const isTagsLoading = tags.status === "loading";
 
   React.useEffect(() => {
-    dispatch(fetchPosts());
-    dispatch(fetchTags());
-  }, []);
-
-  const handleChange = (event, newValue) => {
-    dispatch(newValue === 1 ? fetchPostsPopularity() : fetchPosts());
-    setValue(newValue);
-  };
+    dispatch(fetchPostsTag(id));
+  }, [id]);
 
   return (
     <>
-      <Tabs
-        style={{ marginBottom: 15 }}
-        value={value}
-        onChange={handleChange}
-        aria-label="basic tabs example"
-      >
-        <Tab label="News" />
-        <Tab label="Popular" />
-      </Tabs>
+      <h1 className={styles.sectionHeader}>#{id}</h1>
       <Grid container spacing={4}>
         <Grid xs={8} item>
           {(isPostsLoading ? [...Array(5)] : posts.items).map((obj, index) =>

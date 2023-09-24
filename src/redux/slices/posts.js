@@ -6,6 +6,32 @@ export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
   return data;
 });
 
+export const fetchPostsPopularity = createAsyncThunk(
+  "posts/fetchPostsPopularity",
+  async () => {
+    const { data } = await axios.get("/posts/popularity");
+    return data;
+  }
+);
+
+export const fetchPostsTag = createAsyncThunk(
+  "posts/fetchPostsTag",
+  async (tagId) => {
+    const { data } = await axios.get(`/tags/${tagId}`);
+    const tags = data
+      .map((obj) => obj.tags)
+      .flat()
+      .reduce((uniqueTags, tag) => {
+        if (uniqueTags.length < 5 && !uniqueTags.includes(tag)) {
+          uniqueTags.push(tag);
+        }
+        return uniqueTags;
+      }, []);
+
+    return { data, tags };
+  }
+);
+
 export const fetchTags = createAsyncThunk("posts/fetchTags", async () => {
   const { data } = await axios.get("/tags");
   return data;
@@ -47,6 +73,35 @@ const postsSlice = createSlice({
     [fetchPosts.rejected]: (state) => {
       state.posts.items = [];
       state.posts.status = "error";
+    },
+    // ---------------------------------------------------------------- Reducers for get posts - popularity ----------------------------------------------------------------
+    [fetchPostsPopularity.pending]: (state) => {
+      state.posts.status = "loading";
+    },
+    [fetchPostsPopularity.fulfilled]: (state, action) => {
+      state.posts.items = action.payload;
+      state.posts.status = "loaded";
+    },
+    [fetchPostsPopularity.rejected]: (state) => {
+      state.posts.items = [];
+      state.posts.status = "error";
+    },
+    // ---------------------------------------------------------------- Reducers for get posts - tag ----------------------------------------------------------------
+    [fetchPostsTag.pending]: (state) => {
+      state.posts.status = "loading";
+      state.tags.status = "loading";
+    },
+    [fetchPostsTag.fulfilled]: (state, action) => {
+      state.posts.items = action.payload.data;
+      state.tags.items = action.payload.tags;
+      state.posts.status = "loaded";
+      state.tags.status = "loaded";
+    },
+    [fetchPostsTag.rejected]: (state) => {
+      state.posts.items = [];
+      state.tags.items = [];
+      state.posts.status = "error";
+      state.tags.status = "error";
     },
     // ---------------------------------------------------------------- Reducers for tags ----------------------------------------------------------------
     [fetchTags.pending]: (state) => {
