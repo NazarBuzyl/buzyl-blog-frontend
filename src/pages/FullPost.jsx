@@ -1,5 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import axios from "../axios";
 import ReactMarkdown from "react-markdown";
 
@@ -10,6 +11,7 @@ import { CommentsBlock } from "../components/CommentsBlock";
 export const FullPost = () => {
   const [data, setData] = React.useState();
   const [isLoading, setIsLoading] = React.useState(true);
+  const userData = useSelector((state) => state.auth.data);
   const { id } = useParams();
 
   React.useEffect(() => {
@@ -32,7 +34,7 @@ export const FullPost = () => {
   return (
     <>
       <Post
-        id={data._id}
+        _id={data._id}
         title={data.title}
         imageUrl={data.imageUrl}
         user={data.user}
@@ -40,6 +42,7 @@ export const FullPost = () => {
         viewsCount={data.viewsCount}
         commentsCount={3}
         tags={data.tags}
+        isEditable={userData?._id === data.user._id}
         isFullPost
       >
         <ReactMarkdown children={data.text} />

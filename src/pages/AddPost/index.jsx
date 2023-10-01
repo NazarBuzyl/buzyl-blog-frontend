@@ -4,7 +4,7 @@ import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import SimpleMDE from "react-simplemde-editor";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import "easymde/dist/easymde.min.css";
 import styles from "./AddPost.module.scss";
@@ -29,7 +29,7 @@ export const AddPost = () => {
       const file = event.target.files[0];
       formData.append("image", file);
 
-      const { data } = await axios.post("/upload", formData);
+      const { data } = await axios.post("/upload/post_img", formData);
       setImageUrl(data.url);
     } catch (err) {
       console.warn(err);
@@ -71,7 +71,7 @@ export const AddPost = () => {
       axios.get(`/posts/${id}`).then(({ data }) => {
         setTitle(data.title);
         setImageUrl(data.imageUrl);
-        setTags(data.tags.join(","));
+        setTags(data.tags.join("#"));
         setText(data.text);
       });
       setEditing(true);
@@ -118,7 +118,7 @@ export const AddPost = () => {
             color="error"
             onClick={onClickRemoveImage}
           >
-            Удалить
+            Delete
           </Button>
           <img
             className={styles.image}

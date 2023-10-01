@@ -3,13 +3,13 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
-import Avatar from "@mui/material/Avatar";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import styles from "./Login.module.scss";
 import { fetchAuthRegister, selectIsAuth } from "../../redux/slices/auth";
+import AvatarFile from "./AvatarFile";
 
 export const Registration = () => {
   const isAuth = useSelector(selectIsAuth);
@@ -18,13 +18,15 @@ export const Registration = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     setError,
     formState: { errors, isValid },
   } = useForm({
     defaultValues: {
-      fullName: "Nazar Buzyl",
-      email: "nazar1@gmail.com",
-      password: "12345678",
+      fullName: "",
+      email: "",
+      password: "",
+      avatarURL: "",
     },
     mode: "onChange",
   });
@@ -36,7 +38,6 @@ export const Registration = () => {
     } else if ("token" in data.payload) {
       window.localStorage.setItem("token", data.payload.token);
     }
-    console.log(data);
   };
 
   if (isAuth) {
@@ -49,9 +50,8 @@ export const Registration = () => {
         <Typography classes={{ root: styles.title }} variant="h5">
           Creating account
         </Typography>
-        <div className={styles.avatar}>
-          <Avatar sx={{ width: 100, height: 100 }} />
-        </div>
+        <AvatarFile register={register} setValue={setValue}></AvatarFile>
+
         <TextField
           className={styles.field}
           label="Full name"

@@ -29,7 +29,7 @@ export const Login = () => {
 
   const onSubmit = async (values) => {
     const data = await dispatch(fetchAuthLogin(values));
-    console.log(data);
+
     if (!data.payload) {
       setError("email", {
         type: "404",

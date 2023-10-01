@@ -18,5 +18,12 @@
 .avatar {
   display: flex;
   justify-content: center;
-  margin-bottom: 30px;
+  margin-bottom: 45px;
+}
+
+.deleteBtn {
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  margin: -40px 0 5px;
 }

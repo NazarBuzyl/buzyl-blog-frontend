@@ -1,12 +1,16 @@
 import React from "react";
 import styles from "./UserInfo.module.scss";
 
-export const UserInfo = ({ avatarUrl, fullName, additionalText }) => {
+export const UserInfo = ({ avatarURL, fullName, additionalText }) => {
   return (
     <div className={styles.root}>
       <img
         className={styles.avatar}
-        src={avatarUrl || "/noavatar.png"}
+        src={
+          avatarURL
+            ? `${process.env.REACT_APP_API_URL}${avatarURL}`
+            : "/noavatar.png"
+        }
         alt={fullName}
       />
       <div className={styles.userDetails}>
