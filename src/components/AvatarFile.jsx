@@ -1,11 +1,15 @@
 import React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import axios from "../../axios";
-import styles from "./Login.module.scss";
+import axios from "../axios";
 
-export default function AvatarFile({ setValue }) {
-  const [imageUrl, setImageUrl] = React.useState("");
+export default function AvatarFile({
+  styles,
+  setImageURL,
+  imageURL,
+  onRemoveImage,
+  uploadEndpoint,
+}) {
   const inputFileRef = React.useRef(null);
 
   const handleChangeFile = async (event) => {
@@ -14,9 +18,8 @@ export default function AvatarFile({ setValue }) {
       const file = event.target.files[0];
       formData.append("image", file);
 
-      const { data } = await axios.post("/upload/avatar", formData);
-      setImageUrl(data.url);
-      setValue("avatarURL", data.url);
+      const { data } = await axios.post(uploadEndpoint, formData);
+      setImageURL(data.url);
     } catch (err) {
       console.warn(err);
       alert("Error uploading");
@@ -24,15 +27,17 @@ export default function AvatarFile({ setValue }) {
   };
 
   const onClickRemoveImage = () => {
-    setImageUrl("");
-    setValue("avatarURL", "");
+    setImageURL("");
+    if (typeof onRemoveImage === "function") {
+      onRemoveImage();
+    }
   };
 
   return (
     <>
       <div className={styles.avatar}>
         <Avatar
-          src={`${process.env.REACT_APP_API_URL}${imageUrl}`}
+          src={`${process.env.REACT_APP_API_URL}${imageURL}`}
           sx={{ width: 100, height: 100 }}
           onClick={() => inputFileRef.current.click()}
         />
@@ -43,7 +48,7 @@ export default function AvatarFile({ setValue }) {
           hidden
         />
       </div>
-      {imageUrl && (
+      {imageURL && (
         <>
           <div className={styles.deleteBtn}>
             <Button

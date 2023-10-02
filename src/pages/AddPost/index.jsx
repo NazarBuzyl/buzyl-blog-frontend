@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import TextField from "@mui/material/TextField";
 import Paper from "@mui/material/Paper";
@@ -97,7 +98,7 @@ export const AddPost = () => {
   }
 
   return (
-    <Paper style={{ padding: 30 }}>
+    <Paper elevation={0} style={{ padding: 30 }}>
       <Button
         onClick={() => inputFileRef.current.click()}
         variant="outlined"

@@ -9,16 +9,16 @@ import { useForm } from "react-hook-form";
 
 import styles from "./Login.module.scss";
 import { fetchAuthRegister, selectIsAuth } from "../../redux/slices/auth";
-import AvatarFile from "./AvatarFile";
+import AvatarFile from "../../components/AvatarFile";
 
 export const Registration = () => {
   const isAuth = useSelector(selectIsAuth);
   const dispatch = useDispatch();
+  const [avatarURL, setAvatarURL] = React.useState("");
 
   const {
     register,
     handleSubmit,
-    setValue,
     setError,
     formState: { errors, isValid },
   } = useForm({
@@ -26,7 +26,6 @@ export const Registration = () => {
       fullName: "",
       email: "",
       password: "",
-      avatarURL: "",
     },
     mode: "onChange",
   });
@@ -45,13 +44,17 @@ export const Registration = () => {
   }
 
   return (
-    <Paper classes={{ root: styles.root }}>
+    <Paper elevation={0} classes={{ root: styles.root }}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Typography classes={{ root: styles.title }} variant="h5">
           Creating account
         </Typography>
-        <AvatarFile register={register} setValue={setValue}></AvatarFile>
-
+        <AvatarFile
+          styles={styles}
+          imageURL={avatarURL}
+          setImageURL={setAvatarURL}
+          uploadEndpoint="/upload/avatar"
+        />
         <TextField
           className={styles.field}
           label="Full name"
