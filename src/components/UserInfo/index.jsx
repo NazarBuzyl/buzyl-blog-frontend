@@ -1,21 +1,23 @@
 import React from "react";
 import styles from "./UserInfo.module.scss";
-import { Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import Avatar from "@mui/material/Avatar";
 
 export const UserInfo = ({ _id, avatarURL, fullName, additionalText }) => {
   return (
     <div className={styles.root}>
-      <Navigate to={`/profile/${_id}`}>
-        <img
+      <Link to={`/user/${_id}`}>
+        <Avatar
           className={styles.avatar}
+          alt={fullName}
           src={
             avatarURL
               ? `${process.env.REACT_APP_API_URL}${avatarURL}`
               : "/noavatar.png"
           }
-          alt={fullName}
+          sx={{ width: 30, height: 30 }}
         />
-      </Navigate>
+      </Link>
       <div className={styles.userDetails}>
         <span className={styles.userName}>{fullName}</span>
         <span className={styles.additional}>{additionalText}</span>

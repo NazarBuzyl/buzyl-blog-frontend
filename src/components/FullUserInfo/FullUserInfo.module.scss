@@ -1,0 +1,46 @@
+$blue: #4361ee;
+
+.root {
+  background-color: #fff;
+  border: 1px solid #dedede;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 15px;
+  position: relative;
+}
+.wrapper {
+  padding: 10px 20px 20px;
+}
+.fullName {
+  font-weight: 500;
+  font-size: 1.75rem;
+  line-height: 1.334;
+  letter-spacing: 0em;
+  margin-top: 12px;
+}
+.userName {
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  color: rgba(0, 0, 0, 0.6);
+  margin-bottom: 12px;
+}
+.bio {
+  font-weight: 400;
+  font-size: 15px;
+}
+.editButtons {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  border-radius: 10px;
+}
+
+.skeleton {
+  background-color: #fff;
+  border: 1px solid #dedede;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 15px;
+}

@@ -11,6 +11,7 @@ import {
   AddPost,
   Login,
   EditingProfile,
+  Profile,
 } from "./pages";
 import { fetchAuthMe, selectIsAuth } from "./redux/slices/auth";
 import { TagPage } from "./pages/TagPage";
@@ -37,8 +38,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Registration />} />
           <Route path="/tags/:id" element={<TagPage />} />
-          <Route path="/profile/:id/edit" element={<EditingProfile />} />
-          <Route path="/profile/:id" element={""} />
+          <Route path="/user/:id/edit" element={<EditingProfile />} />
+          <Route path="/user/:id" element={<Profile />} />
         </Routes>
       </Container>
     </>

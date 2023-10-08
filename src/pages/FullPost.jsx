@@ -7,11 +7,14 @@ import ReactMarkdown from "react-markdown";
 import { Post } from "../components/Post";
 import { Index } from "../components/AddComment";
 import { CommentsBlock } from "../components/CommentsBlock";
+import { selectIsAuth } from "../redux/slices/auth";
 
 export const FullPost = () => {
   const [data, setData] = React.useState();
+  const [commentsData, setCommentsData] = React.useState();
   const [isLoading, setIsLoading] = React.useState(true);
   const userData = useSelector((state) => state.auth.data);
+  const isAuth = useSelector(selectIsAuth);
   const { id } = useParams();
 
   React.useEffect(() => {
@@ -19,6 +22,7 @@ export const FullPost = () => {
       .get(`/posts/${id}`)
       .then((req) => {
         setData(req.data);
+        setCommentsData(req.data.comments);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -28,7 +32,12 @@ export const FullPost = () => {
   }, []);
 
   if (isLoading) {
-    return <Post isLoading={isLoading} isFullPost />;
+    return (
+      <>
+        <Post isLoading={isLoading} isFullPost></Post>
+        <CommentsBlock />
+      </>
+    );
   }
 
   return (
@@ -40,34 +49,23 @@ export const FullPost = () => {
         user={data.user}
         createdAt={data.createdAt}
         viewsCount={data.viewsCount}
-        commentsCount={3}
+        commentsCount={commentsData.length}
         tags={data.tags}
         isEditable={userData?._id === data.user._id}
         isFullPost
       >
         <ReactMarkdown children={data.text} />
       </Post>
-      {/* <CommentsBlock
-        items={[
-          {
-            user: {
-              fullName: "Вася Пупкин",
-              avatarUrl: "https://mui.com/static/images/avatar/1.jpg",
-            },
-            text: "Это тестовый комментарий 555555",
-          },
-          {
-            user: {
-              fullName: "Иван Иванов",
-              avatarUrl: "https://mui.com/static/images/avatar/2.jpg",
-            },
-            text: "When displaying three lines or more, the avatar is not aligned at the top. You should set the prop to align the avatar at the top",
-          },
-        ]}
-        isLoading={false}
-      >
-        <Index />
-      </CommentsBlock> */}
+      <CommentsBlock items={commentsData} isLoading={isLoading}>
+        {isAuth && (
+          <Index
+            setComments={setCommentsData}
+            comments={commentsData}
+            {...userData}
+            postId={data._id}
+          />
+        )}
+      </CommentsBlock>
     </>
   );
 };

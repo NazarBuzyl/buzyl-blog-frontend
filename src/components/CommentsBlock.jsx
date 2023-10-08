@@ -1,6 +1,7 @@
 import React from "react";
 
 import { SideBlock } from "./SideBlock";
+import { Link } from "react-router-dom";
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
@@ -11,16 +12,21 @@ import Skeleton from "@mui/material/Skeleton";
 
 export const CommentsBlock = ({ items, children, isLoading = true }) => {
   return (
-    <SideBlock title="Комментарии">
+    <SideBlock title="Comments">
       <List>
-        {(isLoading ? [...Array(5)] : items).map((obj, index) => (
+        {(isLoading ? [...Array(3)] : items).map((obj, index) => (
           <React.Fragment key={index}>
             <ListItem alignItems="flex-start">
               <ListItemAvatar>
                 {isLoading ? (
                   <Skeleton variant="circular" width={40} height={40} />
                 ) : (
-                  <Avatar alt={obj.user.fullName} src={obj.user.avatarUrl} />
+                  <Link to={`/user/${obj.user._id}`}>
+                    <Avatar
+                      alt={obj.user.fullName}
+                      src={`${process.env.REACT_APP_API_URL}${obj.user.avatarURL}`}
+                    />
+                  </Link>
                 )}
               </ListItemAvatar>
               {isLoading ? (

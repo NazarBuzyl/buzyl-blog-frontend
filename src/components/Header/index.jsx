@@ -10,6 +10,7 @@ import { logout, selectIsAuth } from "../../redux/slices/auth";
 
 export const Header = () => {
   const isAuth = useSelector(selectIsAuth);
+  const userData = useSelector((state) => state.auth.data);
   const dispatch = useDispatch();
 
   const onClickLogout = () => {
@@ -29,6 +30,9 @@ export const Header = () => {
           <div className={styles.buttons}>
             {isAuth ? (
               <>
+                <Link to={`/user/${userData._id}`}>
+                  <Button variant="contained">My Profile</Button>
+                </Link>
                 <Link to="/add-post">
                   <Button variant="contained">Create post</Button>
                 </Link>

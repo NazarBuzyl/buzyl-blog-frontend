@@ -1,21 +1,16 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "../../axios";
 
-export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
-  const { data } = await axios.get("/posts");
-  return data;
-});
-
-export const fetchPostsPopularity = createAsyncThunk(
-  "posts/fetchPostsPopularity",
-  async () => {
-    const { data } = await axios.get("/posts/popularity");
+export const fetchPostsByFilter = createAsyncThunk(
+  "posts/fetchPostsByFilter",
+  async (filter = "") => {
+    const { data } = await axios.get(`/posts/${filter}`);
     return data;
   }
 );
 
-export const fetchPostsTag = createAsyncThunk(
-  "posts/fetchPostsTag",
+export const fetchPostsByTag = createAsyncThunk(
+  "posts/fetchPostsByTag",
   async (tagId) => {
     const { data } = await axios.get(`/tags/${tagId}`);
     const tags = data
@@ -62,42 +57,30 @@ const postsSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: {
-    // ---------------------------------------------------------------- Reducers for get posts ----------------------------------------------------------------
-    [fetchPosts.pending]: (state) => {
+    // ---------------------------------------------------------------- Reducers for get posts by filter ----------------------------------------------------------------
+    [fetchPostsByFilter.pending]: (state) => {
       state.posts.status = "loading";
     },
-    [fetchPosts.fulfilled]: (state, action) => {
+    [fetchPostsByFilter.fulfilled]: (state, action) => {
       state.posts.items = action.payload;
       state.posts.status = "loaded";
     },
-    [fetchPosts.rejected]: (state) => {
-      state.posts.items = [];
-      state.posts.status = "error";
-    },
-    // ---------------------------------------------------------------- Reducers for get posts - popularity ----------------------------------------------------------------
-    [fetchPostsPopularity.pending]: (state) => {
-      state.posts.status = "loading";
-    },
-    [fetchPostsPopularity.fulfilled]: (state, action) => {
-      state.posts.items = action.payload;
-      state.posts.status = "loaded";
-    },
-    [fetchPostsPopularity.rejected]: (state) => {
+    [fetchPostsByFilter.rejected]: (state) => {
       state.posts.items = [];
       state.posts.status = "error";
     },
     // ---------------------------------------------------------------- Reducers for get posts - tag ----------------------------------------------------------------
-    [fetchPostsTag.pending]: (state) => {
+    [fetchPostsByTag.pending]: (state) => {
       state.posts.status = "loading";
       state.tags.status = "loading";
     },
-    [fetchPostsTag.fulfilled]: (state, action) => {
+    [fetchPostsByTag.fulfilled]: (state, action) => {
       state.posts.items = action.payload.data;
       state.tags.items = action.payload.tags;
       state.posts.status = "loaded";
       state.tags.status = "loaded";
     },
-    [fetchPostsTag.rejected]: (state) => {
+    [fetchPostsByTag.rejected]: (state) => {
       state.posts.items = [];
       state.tags.items = [];
       state.posts.status = "error";

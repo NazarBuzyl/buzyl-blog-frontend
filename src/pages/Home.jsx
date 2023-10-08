@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Tabs from "@mui/material/Tabs";
@@ -7,12 +8,7 @@ import Grid from "@mui/material/Grid";
 import { Post } from "../components/Post";
 import { TagsBlock } from "../components/TagsBlock";
 import { CommentsBlock } from "../components/CommentsBlock";
-import {
-  fetchPosts,
-  fetchTags,
-  fetchPostsPopularity,
-  fetchPostsTag,
-} from "../redux/slices/posts";
+import { fetchPostsByFilter, fetchTags } from "../redux/slices/posts";
 
 export const Home = () => {
   const dispatch = useDispatch();
@@ -24,12 +20,14 @@ export const Home = () => {
   const isTagsLoading = tags.status === "loading";
 
   React.useEffect(() => {
-    dispatch(fetchPosts());
+    dispatch(fetchPostsByFilter());
     dispatch(fetchTags());
   }, []);
 
   const handleChange = (event, newValue) => {
-    dispatch(newValue === 1 ? fetchPostsPopularity() : fetchPosts());
+    dispatch(
+      newValue === 1 ? fetchPostsByFilter("popularity") : fetchPostsByFilter()
+    );
     setValue(newValue);
   };
 
@@ -58,7 +56,7 @@ export const Home = () => {
                 user={obj.user}
                 createdAt={obj.createdAt}
                 viewsCount={obj.viewsCount}
-                commentsCount={3}
+                commentsCount={obj.comments.length}
                 tags={obj.tags}
                 isEditable={userData?._id === obj.user._id}
               />
@@ -68,22 +66,7 @@ export const Home = () => {
         <Grid xs={4} item>
           <TagsBlock items={tags.items} isLoading={isTagsLoading} />
           {/* <CommentsBlock
-            items={[
-              {
-                user: {
-                  fullName: "Вася Пупкин",
-                  avatarUrl: "https://mui.com/static/images/avatar/1.jpg",
-                },
-                text: "Это тестовый комментарий",
-              },
-              {
-                user: {
-                  fullName: "Иван Иванов",
-                  avatarUrl: "https://mui.com/static/images/avatar/2.jpg",
-                },
-                text: "When displaying three lines or more, the avatar is not aligned at the top. You should set the prop to align the avatar at the top",
-              },
-            ]}
+            items={}
             isLoading={false}
           /> */}
         </Grid>
